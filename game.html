@@ -16,61 +16,113 @@
     </div>
     <script>
         const log = console.log.bind(console)
-        var canvas = document.querySelector('#id-canvas')
-        var context = canvas.getContext('2d')
 
-        var x = 100
-        var y = 200
-        var leftDown = false
-        var rightDown = false
-        var speed = 5
-
-        var img = new Image()
-        img.src = './img/paddle.png'
-        img.onload = function() { // onload 异步
-            context.drawImage(img, x, y)
+        var imageFromPath = function (path) {
+            var img = new Image()
+            img.src = path
+            return img
         }
 
-
-        // events
-        window.addEventListener('keydown', function (event) {
-            var key = event.key
-            if (key === 'a') {
-                // left
-                leftDown = true
-            } else if (key === 'd') {
-                // right
-                rightDown = true
+        var Paddle = function () {
+            var img = imageFromPath('./img/paddle.png')
+            var o = {
+                image: img,
+                x: 100,
+                y: 200,
+                speed: 5,
             }
-
-        })
-        window.addEventListener('keyup', function (event) {
-            var key = event.key
-            if (key === 'a') {
-                leftDown = false
-
-            } else if (key === 'd') {
-                rightDown = false
+            o.moveLeft = function () {
+                o.x -= o.speed
             }
-
-        })
-
-
-        setInterval(function () {
-            // update x and y
-            if (leftDown) {
-                x -= speed
-            } else if (rightDown) {
-                x += speed
+            o.moveRight = function () {
+                o.x += o.speed
             }
+            return o
 
-            // draw
-            context.clearRect(0, 0, canvas.width, canvas.height)
-            context.drawImage(img, x, y)
+        }
 
-        }, 1000/30)
+        var Guagame = function () {
+            var g = {}
+            var canvas = document.querySelector('#id-canvas')
+            var context = canvas.getContext('2d')
+            g.canvas = canvas
+            g.context = context
+            g.update = function () {}
+            g.draw = function () {}
+            setInterval(function () {
+                console.log('监听动画')
+                // update
+                g.update()
+                // clear
+                g.context.clearRect(0, 0, g.canvas.width, g.canvas.height)
+                // draw
+                g.draw()
+
+            }, 1000/30)
+
+            return g
+        }
+
+        var __mian = function () {
+
+            var game = Guagame()
+            var paddle = Paddle()
+
+            var leftDown = false
+            var rightDown = false
+
+            // events
+            window.addEventListener('keydown', function (event) {
+                var key = event.key
+                if (key === 'a') {
+                    // left
+                    leftDown = true
+                } else if (key === 'd') {
+                    // right
+                    rightDown = true
+                }
+
+            })
+            window.addEventListener('keyup', function (event) {
+                var key = event.key
+                if (key === 'a') {
+                    leftDown = false
+                } else if (key === 'd') {
+                    rightDown = false
+                }
+
+            })
 
 
+            setInterval(function () {
+                console.log('监听动画')
+                // update x and y
+                if (leftDown) {
+                    paddle.moveLeft()
+                } else if (rightDown) {
+                    paddle.moveRight()
+                }
+
+                // draw
+                context.clearRect(0, 0, canvas.width, canvas.height)
+                context.drawImage(paddle.image, paddle.x, paddle.y)
+
+            }, 1000/30)
+
+
+        }
+
+        __mian()
+
+    </script>
+
+    <script>
+        /*
+        * 优化：
+        * 1.封装 Paddle
+        * 2.封装 setInterval、canvas
+        *
+        * */
     </script>
 
 </body>
