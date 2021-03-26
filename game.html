@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>game brick</title>
+    <style>
+        canvas {
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <canvas id="id-canvas" width="400" height="300"></canvas>
+
+    </div>
+    <script>
+        const log = console.log.bind(console)
+        var canvas = document.querySelector('#id-canvas')
+        var context = canvas.getContext('2d')
+
+        var x = 100
+        var y = 200
+        var leftDown = false
+        var rightDown = false
+        var speed = 5
+
+        var img = new Image()
+        img.src = './img/paddle.png'
+        img.onload = function() { // onload 异步
+            context.drawImage(img, x, y)
+        }
+
+
+        // events
+        window.addEventListener('keydown', function (event) {
+            var key = event.key
+            if (key === 'a') {
+                // left
+                leftDown = true
+            } else if (key === 'd') {
+                // right
+                rightDown = true
+            }
+
+        })
+        window.addEventListener('keyup', function (event) {
+            var key = event.key
+            if (key === 'a') {
+                leftDown = false
+
+            } else if (key === 'd') {
+                rightDown = false
+            }
+
+        })
+
+
+        setInterval(function () {
+            // update x and y
+            if (leftDown) {
+                x -= speed
+            } else if (rightDown) {
+                x += speed
+            }
+
+            // draw
+            context.clearRect(0, 0, canvas.width, canvas.height)
+            context.drawImage(img, x, y)
+
+        }, 1000/30)
+
+
+    </script>
+
+</body>
+</html>
