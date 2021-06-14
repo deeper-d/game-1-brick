@@ -47,8 +47,13 @@
             var context = canvas.getContext('2d')
             g.canvas = canvas
             g.context = context
-            g.update = function () {}
-            g.draw = function () {}
+            g.update = function () {
+                // 空方法，后续重写这个方法
+            }
+            g.draw = function () {
+                // 空方法，后续重写这个方法
+            }
+a
             setInterval(function () {
                 console.log('监听动画')
                 // update
@@ -65,7 +70,9 @@
 
         var __mian = function () {
 
+            // 封装 game
             var game = Guagame()
+            // 封装  paddle
             var paddle = Paddle()
 
             var leftDown = false
@@ -93,21 +100,34 @@
 
             })
 
-
-            setInterval(function () {
-                console.log('监听动画')
+             game.update = function () {
                 // update x and y
                 if (leftDown) {
                     paddle.moveLeft()
                 } else if (rightDown) {
                     paddle.moveRight()
                 }
+            }
+            game.draw = function () {
+                game.context.drawImage(paddle.image, paddle.x, paddle.y)
+            }
 
-                // draw
-                context.clearRect(0, 0, canvas.width, canvas.height)
-                context.drawImage(paddle.image, paddle.x, paddle.y)
 
-            }, 1000/30)
+        
+            // setInterval(function () {
+            //     // 不断监听动作和施展动画
+            //     // update x and y
+            //     if (leftDown) {
+            //         paddle.moveLeft()
+            //     } else if (rightDown) {
+            //         paddle.moveRight()
+            //     }
+
+            //     // draw
+            //     game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
+            //     game.context.drawImage(paddle.image, paddle.x, paddle.y)
+
+            // }, 1000/30)
 
 
         }
