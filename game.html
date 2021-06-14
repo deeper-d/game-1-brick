@@ -27,8 +27,8 @@
             var img = imageFromPath('./img/ball.png')
             var o = {
                 image: img,
-                x: 100,
-                y: 150,
+                x: 80,
+                y: 80,
                 speedx: 10,
                 speedy: 10,
                 fired: false,
@@ -59,13 +59,24 @@
                 image: img,
                 x: 100,
                 y: 200,
-                speed: 5,
+                speed: 15,
             }
             o.moveLeft = function () {
                 o.x -= o.speed
             }
             o.moveRight = function () {
                 o.x += o.speed
+            }
+            o.collide = function(ball) {
+                // 判断两个矩形是否相交
+                if (ball.y + ball.image.height > o.y) {
+                    if (ball.x > o.x && ball.x < o.x + o.image.width) {
+                        return true
+                    }
+                } else {
+                    return false
+                }
+
             }
             return o
 
@@ -147,6 +158,10 @@
 
             game.update = function () {
                 ball.move()
+                // 判断相撞
+                if (paddle.collide(ball)) {
+                    ball.speedy *= -1
+                }
             }
             game.draw = function () {
                 game.drawImage(paddle)
@@ -166,6 +181,7 @@
         * 2.封装 setInterval、canvas
         * 3.分装按键事件
         * 4.封装 ball
+          5.判断相撞
         * */
     </script>
 
