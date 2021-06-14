@@ -42,7 +42,10 @@
         }
 
         var Guagame = function () {
-            var g = {}
+            var g = {
+                actions: {},
+                keydowns: {}
+            }
             var canvas = document.querySelector('#id-canvas')
             var context = canvas.getContext('2d')
             g.canvas = canvas
@@ -53,9 +56,34 @@
             g.draw = function () {
                 // 空方法，后续重写这个方法
             }
-a
+
+            g.drawImage = function (guaImage)  {
+                g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
+            }
+
+            // events
+            window.addEventListener('keydown', function (event) {
+                g.keydowns[event.key] = true
+            })
+            window.addEventListener('keyup', function (event) {
+                g.keydowns[event.key] = false
+            })
+            g.registerAction = function (key, callback) {
+                g.actions[key] = callback
+
+            }
+
+            // timer
             setInterval(function () {
                 console.log('监听动画')
+                // events
+                var keys = Object.keys(g.actions)
+                for (let i = 0; i < keys.length; i++) {
+                    var k = keys[i]
+                    if (g.keydowns[k]) {
+                        g.actions[k]()
+                    }
+                }
                 // update
                 g.update()
                 // clear
@@ -75,60 +103,20 @@ a
             // 封装  paddle
             var paddle = Paddle()
 
-            var leftDown = false
-            var rightDown = false
-
-            // events
-            window.addEventListener('keydown', function (event) {
-                var key = event.key
-                if (key === 'a') {
-                    // left
-                    leftDown = true
-                } else if (key === 'd') {
-                    // right
-                    rightDown = true
-                }
-
+            // register actions
+            game.registerAction('a', function () {
+                paddle.moveLeft()
             })
-            window.addEventListener('keyup', function (event) {
-                var key = event.key
-                if (key === 'a') {
-                    leftDown = false
-                } else if (key === 'd') {
-                    rightDown = false
-                }
-
+            game.registerAction('d', function () {
+                paddle.moveRight()
             })
 
-             game.update = function () {
-                // update x and y
-                if (leftDown) {
-                    paddle.moveLeft()
-                } else if (rightDown) {
-                    paddle.moveRight()
-                }
+            game.update = function () {
+
             }
             game.draw = function () {
-                game.context.drawImage(paddle.image, paddle.x, paddle.y)
+                game.drawImage(paddle)
             }
-
-
-        
-            // setInterval(function () {
-            //     // 不断监听动作和施展动画
-            //     // update x and y
-            //     if (leftDown) {
-            //         paddle.moveLeft()
-            //     } else if (rightDown) {
-            //         paddle.moveRight()
-            //     }
-
-            //     // draw
-            //     game.context.clearRect(0, 0, game.canvas.width, game.canvas.height)
-            //     game.context.drawImage(paddle.image, paddle.x, paddle.y)
-
-            // }, 1000/30)
-
 
         }
 
@@ -141,6 +129,7 @@ a
         * 优化：
         * 1.封装 Paddle
         * 2.封装 setInterval、canvas
+        * 3.分装按键事件
         *
         * */
     </script>
