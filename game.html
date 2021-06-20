@@ -12,186 +12,61 @@
 <body>
     <div>
         <canvas id="id-canvas" width="400" height="300"></canvas>
+        <br/>
+        <input id='id-input-speed' type="range" >
 
     </div>
+    <script src="guagame.js"></script>
+    <script src="paddle.js"></script>
+    <script src="ball.js"></script>
+    <script src="block.js"></script>
+    <script src="utils.js"></script>
+    <script src="level.js"></script>
     <script>
-        const log = console.log.bind(console)
-
-        var imageFromPath = function (path) {
-            var img = new Image()
-            img.src = path
-            return img
-        }
-
-        var Ball = function () {
-            var img = imageFromPath('./img/ball.png')
-            var o = {
-                image: img,
-                x: 80,
-                y: 80,
-                speedx: 10,
-                speedy: 10,
-                fired: false,
-            }
-            o.fire = function () {
-                o.fired = true
-            }
-            o.move = function () {
-                if (o.fired) {
-                    console.log('ball move')
-                    if  (o.x < 0 || o.x > 400) {
-                        o.speedx = -o.speedx
-                    }
-                    if  (o.y < 0 || o.y > 300) {
-                        o.speedy = -o.speedy
-                    }
-                    o.x += o.speedx
-                    o.y += o.speedy
-                }
-            }
-            o.反弹 = function() {
-                o.speedy *= -1
-            }
-            return o
-
-        }
-
-        var rectIntersects = function(a, b) {
-            var o = a
-            if (b.y > o.y && b.y < o.y + o.image.height) {
-                if (b.x > o.x && b.x < o.x + o.image.width) {
-                    return true
-                }
-            }
-            return false
-        }
-        var Block = function() {
-            var img = imageFromPath('./img/block.png')
-            var o = {
-                image: img,
-                x: 300,
-                y: 80,
-                w: 50,
-                h: 20 ,
-                alive: true,
-            }
-            o.kill = function() {
-                o.alive = false
-            }
-            o.collide = function(ball) {
-                // 判断两个矩形是否相交
-                return o.alive && (rectIntersects(o, ball) || rectIntersects(ball, o))
-            }
-            return o
-        }
-
-        var Paddle = function () {
-            var img = imageFromPath('./img/paddle.png')
-            var o = {
-                image: img,
-                x: 100,
-                y: 260,
-                speed: 15,
-            }
-            o.move = function(x) {
-                if (o.x < 0) {
-                    x = 0
-                }
-                 if (x > 400 - o.image.width) {
-                    x = 400 - o.image.width
-                }
-                o.x = x
-            }
-            o.moveLeft = function () {
-                o.move(o.x - o.speed)
-            }
-            o.moveRight = function () {
-                o.move(o.x + o.speed)
-            }
-            o.collide = function(ball) {
-                // 判断两个矩形是否相交
-                if (ball.y + ball.image.height > o.y) {
-                    if (ball.x > o.x && ball.x < o.x + o.image.width) {
-                        return true
-                    }
-                } else {
-                    return false
-                }
-
-            }
-            return o
-
-        }
-
-        var Guagame = function () {
-            var g = {
-                actions: {},
-                keydowns: {}
-            }
-            var canvas = document.querySelector('#id-canvas')
-            var context = canvas.getContext('2d')
-            g.canvas = canvas
-            g.context = context
-            g.update = function () {
-                // 空方法，后续重写这个方法
-            }
-            g.draw = function () {
-                // 空方法，后续重写这个方法
-            }
-
-            g.drawImage = function (guaImage)  {
-                g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
-            }
-
-            // events
-            window.addEventListener('keydown', function (event) {
-                g.keydowns[event.key] = true
-            })
-            window.addEventListener('keyup', function (event) {
-                g.keydowns[event.key] = false
-            })
-            g.registerAction = function (key, callback) {
-                g.actions[key] = callback
-
-            }
-
-            // timer
-            setInterval(function () {
-                console.log('监听动画')
-                // events
-                var keys = Object.keys(g.actions)
-                for (let i = 0; i < keys.length; i++) {
-                    var k = keys[i]
-                    if (g.keydowns[k]) {
-                        g.actions[k]()
-                    }
-                }
-                // update
-                g.update()
-                // clear
-                g.context.clearRect(0, 0, g.canvas.width, g.canvas.height)
-                // draw
-                g.draw()
-
-            }, 1000/30)
-
-            return g
-        }
-
+        var blocks = []
+        var paused = false
         var __mian = function () {
+            var enableDebugMode = function(enable) {
+            if (!enable) {
+                return
+            }
+            window.addEventListener('keydown', function(event) {
+                let k = event.key
+                if (k === 'p') {
+                    paused = !paused 
+                } else if ('123456'.includes(k)) {
+                    console.log(k)
+                    blocks = loadLevel(Number(k))
+                }
+            })
+            // 控制speed
+            document.querySelector('#id-input-speed').addEventListener('input', function(event) {
+                var fps = event.target.value
+                window.fps = fps
+            })
+        }
+
+        var loadLevel = function(n) {
+            n = n - 1
+            var level = levels[n]
+            var blocks = []
+            for (var i = 0; i < level.length; i++) {
+                var p = level[i]
+                var b = Block(p)
+                blocks.push(b)
+            }
+            return blocks
+        }
+
+
+            enableDebugMode(true)
             // 封装 game
-            var game = Guagame()
+            var game = Guagame(20)
             // 封装  paddle
             var paddle = Paddle()
             var ball = Ball()
             // var block = Block()
-            var blocks = []
-            for (var i = 0; i < 3; i++) {
-                var b = Block()
-                b.x = i * 150
-                b.y = 10
-                blocks.push(b)
-            }
+            blocks = loadLevel(1)
 
             // register actions
             game.registerAction('a', function () {
@@ -205,6 +80,9 @@
             })
 
             game.update = function () {
+                if (paused) {
+                    return
+                }
                 ball.move()
                 // 判断相撞
                 if (paddle.collide(ball)) {
@@ -233,6 +111,8 @@
                            
             }
 
+
+
         }
 
         __mian()
@@ -249,6 +129,12 @@
           5.判断矩形相撞
           6.添加 block
           ***todo: 抽 paddle.move 方法非常精妙 第二节31：15
+
+          7.再次抽离框架函数guagame.js第二节 55：00
+          8.添加关卡 1：03：38
+          9.给砖块加命 1：15：28
+          10.全局fps抽离 1：24：43
+          11.添加滑条 1：31：47
         * */
     </script>
 
