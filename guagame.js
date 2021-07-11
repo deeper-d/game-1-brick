@@ -31,7 +31,7 @@ var Guagame = function (fps) {
 
     window.fps = 30
     var runloop = function() {
-        console.log('监听动画')
+        // console.log('监听动画')
 
         // events
         var keys = Object.keys(g.actions)

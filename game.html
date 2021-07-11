@@ -22,102 +22,7 @@
     <script src="block.js"></script>
     <script src="utils.js"></script>
     <script src="level.js"></script>
-    <script>
-        var blocks = []
-        var paused = false
-        var __mian = function () {
-            var enableDebugMode = function(enable) {
-            if (!enable) {
-                return
-            }
-            window.addEventListener('keydown', function(event) {
-                let k = event.key
-                if (k === 'p') {
-                    paused = !paused 
-                } else if ('123456'.includes(k)) {
-                    console.log(k)
-                    blocks = loadLevel(Number(k))
-                }
-            })
-            // 控制speed
-            document.querySelector('#id-input-speed').addEventListener('input', function(event) {
-                var fps = event.target.value
-                window.fps = fps
-            })
-        }
-
-        var loadLevel = function(n) {
-            n = n - 1
-            var level = levels[n]
-            var blocks = []
-            for (var i = 0; i < level.length; i++) {
-                var p = level[i]
-                var b = Block(p)
-                blocks.push(b)
-            }
-            return blocks
-        }
-
-
-            enableDebugMode(true)
-            // 封装 game
-            var game = Guagame(20)
-            // 封装  paddle
-            var paddle = Paddle()
-            var ball = Ball()
-            // var block = Block()
-            blocks = loadLevel(1)
-
-            // register actions
-            game.registerAction('a', function () {
-                paddle.moveLeft()
-            })
-            game.registerAction('d', function () {
-                paddle.moveRight()
-            })
-            game.registerAction('f', function () {
-                ball.fire()
-            })
-
-            game.update = function () {
-                if (paused) {
-                    return
-                }
-                ball.move()
-                // 判断相撞
-                if (paddle.collide(ball)) {
-                    ball.反弹()
-                }
-                for (var i = 0; i < blocks.length; i++) {
-                    var block = blocks[i]
-                    if (block.collide(ball)) {
-                        block.kill()
-                        ball.反弹()
-                    }
-                }
-        
-                
-            }
-            game.draw = function () {
-                game.drawImage(paddle)
-                game.drawImage(ball)
-                
-                for (var i = 0; i < blocks.length; i++) {
-                    var block = blocks[i]
-                    if (block.alive) {
-                        game.drawImage(block)   
-                    }  
-                }
-                           
-            }
-
-
-
-        }
-
-        __mian()
-
-    </script>
+    <script src='main.js'></script>
 
     <script>
         /*
@@ -135,6 +40,22 @@
           9.给砖块加命 1：15：28
           10.全局fps抽离 1：24：43
           11.添加滑条 1：31：47
+
+          第三集
+          12.提取 main.js
+          13.提取 imageByName, game传递 15：00
+
+          第四集
+          14.添加优化图片ui,  添加背景图
+          15.优化相交判断 13：00
+          16.小球可拖动 20：00
+          有问题要想办法解决，不然就是一件事做了5年而已！！！
+          态度不一样， 做出的努力不一样，结果就不一样
+
+          第五集
+          
+
+
         * */
     </script>
 

@@ -3,7 +3,7 @@ var Paddle = function () {
     var o = {
         image: img,
         x: 100,
-        y: 260,
+        y: 240,
         speed: 15,
     }
     o.move = function(x) {
@@ -11,6 +11,7 @@ var Paddle = function () {
             x = 0
         }
          if (x > 400 - o.image.width) {
+            console.log('o.image.width', o.image.width)
             x = 400 - o.image.width
         }
         o.x = x
@@ -21,6 +22,9 @@ var Paddle = function () {
     o.moveRight = function () {
         o.move(o.x + o.speed)
     }
+    var aInb = function(x, x1, x2) {
+        return x >= x1 && x <= x2
+    }
     o.collide = function(ball) {
         // 判断两个矩形是否相交
         if (ball.y + ball.image.height > o.y) {
@@ -30,6 +34,16 @@ var Paddle = function () {
         } else {
             return false
         }
+
+        // var a = o
+        // var b = ball
+        // if (aInb(a.x, b.x, b.x + b.w) || aInb(b.x, a.x, a.x + a.w)) {
+        //     if (aInb(a.y, b.y, b.y + b.h) || aInb(b.y, a.y, a.y + a.h)) {
+        //         return true
+        //     }
+        // }
+        // return false
+    
 
     }
     return o

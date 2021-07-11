@@ -27,6 +27,12 @@ var Ball = function () {
     o.反弹 = function() {
         o.speedy *= -1
     }
+
+    o.hasPoint = function(x, y) {
+        var xIn = x > o.x && x < o.x + o.image.width
+        var yIn = y > o.y && y < o.y + o.image.height
+        return xIn && yIn
+    }
     return o
 
 }
