@@ -16,15 +16,21 @@
         <input id='id-input-speed' type="range" >
 
     </div>
-    <script src="guagame.js"></script>
-    <script src="paddle.js"></script>
-    <script src="ball.js"></script>
-    <script src="block.js"></script>
-    <script src="utils.js"></script>
-    <script src="level.js"></script>
-    <script src='scene.js'></script>
+    <script src="guagame/utils.js"></script>
+    <script src="guagame/gua_game.js"></script>
+    <script src="guagame/gua_scene.js"></script>
+
+    <script src="scene/main/paddle.js"></script>
+    <script src="scene/main/ball.js"></script>
+    <script src="scene/main/block.js"></script>
+    <script src="scene/main/level.js"></script>
+    <script src='scene/main/scene.js'></script>
+    <script src='scene/end/scene_end.js'></script>
+    <script src='scene/title/scene_title.js'></script>
+
+
     <script src='main.js'></script>
-    <script src='scene_end.js'></script>
+
 
     <script>
         /*
@@ -51,15 +57,20 @@
           14.添加优化图片ui,  添加背景图
           15.优化相交判断 13：00
           16.小球可拖动 20：00
-          有问题要想办法解决，不然就是一件事做了5年而已！！！
+          ** 有问题要想办法解决，不然就是一件事做了5年而已！！！
           态度不一样， 做出的努力不一样，结果就不一样
 
           第五集 场景抽象
-          创建 scene.js
-          修改 game.js 23：15
-          创建 scene_end.js 43:50
-          ** 跟不上时代发展是会被淘汰掉的，程序也是一样
+          17.创建 scene.js
+          18.修改 game.js 23：15
+          19.创建 scene_end.js 43:50
+          ** 不要有初恋想法，一开始学什么就只觉得那个好而不愿意改变。
+          跟不上时代发展是会被淘汰掉的，程序也是一样
 
+          第六集 面向对象重构
+          20.整理文件夹 8：26
+          21.类 重构 class GuaScene 19：00
+              静态方法 static 31:42 
 
 
         * */
