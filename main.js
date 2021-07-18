@@ -34,7 +34,7 @@ var __mian = function () {
         })
     }
 
-    var game = Guagame(20, [], function(g) {
+    var game = new Guagame(20, [], function(g) {
         var scene = SceneTitle.new(g)
         g.runWithScene(scene)
     })
