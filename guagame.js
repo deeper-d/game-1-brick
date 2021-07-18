@@ -1,5 +1,6 @@
-var Guagame = function (fps) {
+var Guagame = function (fps, images, runCallback) {
     var g = {
+        scene: null,
         actions: {},
         keydowns: {}
     }
@@ -7,15 +8,21 @@ var Guagame = function (fps) {
     var context = canvas.getContext('2d')
     g.canvas = canvas
     g.context = context
+
     g.update = function () {
-        // 空方法，后续重写这个方法
+        g.scene.update && g.scene.update()
+
     }
     g.draw = function () {
-        // 空方法，后续重写这个方法
+        g.scene.draw()
     }
 
     g.drawImage = function (guaImage)  {
         g.context.drawImage(guaImage.image, guaImage.x, guaImage.y)
+    }
+
+    g.replaceScene = function(newScene) {
+        g.scene = newScene
     }
 
     // events
@@ -54,11 +61,17 @@ var Guagame = function (fps) {
          }, 1000/window.fps)
     }
 
-    // timer
-    setTimeout(function () {
-       runloop()
+    g.runWithScene = function(scene) {
+        g.scene = scene
 
-    }, 1000/window.fps)
+        setTimeout(function () {
+            runloop()
+    
+        }, 1000/window.fps)
+    }
+
+    runCallback(g)
+
 
     return g
 }

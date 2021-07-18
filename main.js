@@ -1,5 +1,6 @@
 var blocks = []
 var paused = false
+var enableDrag = false
 var loadLevel = function(n) {
     n = n - 1
     var level = levels[n]
@@ -33,25 +34,12 @@ var __mian = function () {
         })
     }
 
+    var game = Guagame(20, [], function(g) {
+        var scene = Scene(g)
+        g.runWithScene(scene)
+    })
 
     enableDebugMode(true)
-    // 封装 game
-    var game = Guagame(20)
-
-    var scene = Scene(game)
-
-    game.update = function () {
-        if (paused) {
-            return
-        }
-        // s.update
-        scene.update()
-    }
-    game.draw = function () {
-       // s.draw
-       scene.draw()
-                   
-    }
 
 }
 

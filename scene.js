@@ -22,6 +22,7 @@ var Scene = function(game) {
 
 
     s.draw = function() {
+
         game.drawImage(paddle)
         game.drawImage(ball)
         
@@ -38,7 +39,19 @@ var Scene = function(game) {
         game.context.fillStyle = "#553"
     }
     s.update = function() {
+        if (paused) {
+            return
+        }
+
         ball.move()
+
+        // 判断游戏结束
+        if (ball.y > 300) {
+            // 跳转到游戏结束的场景 
+            var end = SceneEnd(game)
+            game.replaceScene(end)
+        }
+
         // 判断相撞
         if (paddle.collide(ball)) {
             ball.反弹()
