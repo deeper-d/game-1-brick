@@ -23,6 +23,11 @@ class Guagame {
         this.init()
     }
 
+    static instance(...args) {
+        this.i = this.i || new this(...args)
+        return this.i
+    }
+
     init() {
         this.start()
     }
