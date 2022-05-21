@@ -7,7 +7,8 @@ var Scene = function(game) {
     var paddle = Paddle(game)
     var ball = Ball(game)
     var score = 0
-    blocks = loadLevel(1)
+    var level = 1
+    blocks = loadLevel(level)
 
     // register actions
     game.registerAction('a', function () {
@@ -64,6 +65,30 @@ var Scene = function(game) {
             }
         }
 
+        // 判断什么时候进入下一关
+        changeLevel()
+
+    }
+
+    function changeLevel() {
+        let pass = []
+        for (let b of blocks) {
+            if (!b.alive)  {
+                pass.push(1)
+            }
+        }
+        if (pass.length === blocks.length) {
+            level += 1
+            console.log('下一关 ！！', level)
+            if (level <= 3) {
+                blocks = loadLevel(level)
+            } else {
+                // 通关成功，跳转到游戏结束的场景 
+                var end = SceneEnd.new(game)
+                game.replaceScene(end)
+            }
+           
+        }
     }
 
      // mouse event 

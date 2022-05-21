@@ -22,8 +22,7 @@ var __mian = function () {
             let k = event.key
             if (k === 'p') {
                 paused = !paused 
-            } else if ('123456'.includes(k)) {
-                console.log(k)
+            } else if ('123'.includes(k)) {
                 blocks = loadLevel(Number(k))
             }
         })

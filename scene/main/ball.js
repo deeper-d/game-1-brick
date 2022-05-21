@@ -3,7 +3,7 @@ var Ball = function () {
     var o = {
         image: img,
         x: 80,
-        y: 80,
+        y: 120,
         speedx: 10,
         speedy: 10,
         fired: false,

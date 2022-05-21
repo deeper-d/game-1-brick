@@ -4,7 +4,7 @@ var Paddle = function () {
         image: img,
         x: 100,
         y: 240,
-        speed: 15,
+        speed: 30,
     }
     o.move = function(x) {
         if (o.x < 0) {
