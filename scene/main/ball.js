@@ -4,8 +4,8 @@ var Ball = function () {
         image: img,
         x: 80,
         y: 120,
-        speedx: 10,
-        speedy: 10,
+        speedx: 5,
+        speedy: 5,
         fired: false,
     }
     o.fire = function () {
